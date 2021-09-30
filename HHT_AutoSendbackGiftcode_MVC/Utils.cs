@@ -147,7 +147,8 @@ namespace HHT_AutoSendbackGiftcode_MVC
         }
         public static int CountSplitString(string data)
         {
-            var totalGiftcode = data.Split();
+            string[] stringSeparators = new string[] { "\r\n" };
+            var totalGiftcode = data.Split(stringSeparators , StringSplitOptions.RemoveEmptyEntries); 
             return totalGiftcode.Length;
         }
     }
