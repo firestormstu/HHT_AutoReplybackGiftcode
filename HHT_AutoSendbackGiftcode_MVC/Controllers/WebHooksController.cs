@@ -13,10 +13,10 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
     public class WebHooksController : Controller
     {
         // GET: WebHooks
-        string Facebook_Page_ID = "272225871315132";
+       // string Facebook_Page_ID = "272225871315132";
         string Facebook_Page_Access_Token = "EAARmBJ5iHrsBAObgcBiFbNwx7OYgKD5Y9N1uRqailzMLfrLcRrpBzlKNj4a4ZBxQedAjRXcjZCitl0Fv56mQMa90DQnXUzWvTg9JZBLddrQXKnDfaO6LxjdKYfRcKg6z0Musf2cILOVaVGuvyH9FKHZAnTTeDKXVVTPBZAsqUSYEJDZAcREffxZAsJW8NOhn1o1u5mHNW6BwwZDZD";
-        string Facebook_App_ID = "1238069929975483";
-        string Facebook_App_Secret = "970fe3cdf40f7927da46e35e4089913f";
+ /*       string Facebook_App_ID = "1238069929975483";
+        string Facebook_App_Secret = "970fe3cdf40f7927da46e35e4089913f";*/
         [HttpGet]
         public ActionResult Receive()
         {

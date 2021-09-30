@@ -38,6 +38,99 @@ namespace HHT_AutoSendbackGiftcode_MVC
             }  
             
         }
+        public static bool WriteToFileLog(string dataString)
+        {
+            var fileName ="Log"+ DateTime.Now.ToString("dd-MM-yyyy")+".txt";
+            var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
+            var path = currentDomain+"/Log/" + fileName;
+            try
+            {
+                if (!File.Exists(path)) // If file does not exists
+                {
+                    File.Create(path).Close(); // Create file
+                    using (StreamWriter sw = File.AppendText(path))
+                    {
+                        sw.WriteLine(dataString); // Write text to .txt file
+                    }
+                }
+                else // If file already exists
+                {
+                    // File.WriteAllText("FILENAME.txt", String.Empty); // Clear file
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        sw.WriteLine(dataString); // Write text to .txt files
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+        public static bool WriteToFileUser(string dataString)
+        {
+            var fileName = "UserGotCode.txt";
+            var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
+            var path = currentDomain + fileName;
+            try
+            {
+                if (!File.Exists(path)) // If file does not exists
+                {
+                    File.Create(path).Close(); // Create file
+                    using (StreamWriter sw = File.AppendText(path))
+                    {
+                        sw.WriteLine(dataString); // Write text to .txt file
+                    }
+                }
+                else // If file already exists
+                {
+                    // File.WriteAllText("FILENAME.txt", String.Empty); // Clear file
+                    using (StreamWriter sw = File.CreateText(path))
+                    {
+                        sw.WriteLine(dataString); // Write text to .txt files
+                    }
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+        public static bool CheckUserExist(string PSID)
+        {
+            var fileName = "UserGotCode.txt";
+            var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
+            var path = currentDomain + fileName;
+            try
+            {
+                if (!File.Exists(path)) // If file does not exists
+                {
+                    File.Create(path).Close(); // Create file
+                    return false;
+                }
+                else // If file already exists
+                {
+                    string stringData = File.ReadAllText(path);
+                    if (stringData.Contains(PSID))
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
         public static int ReadToFile(string fileName)
         {
             var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
@@ -54,16 +147,8 @@ namespace HHT_AutoSendbackGiftcode_MVC
         }
         public static int CountSplitString(string data)
         {
-            int countGiftcode = 0;
             var totalGiftcode = data.Split();
-            foreach (var item in totalGiftcode)
-            {
-                if (!string.IsNullOrEmpty(item))
-                {
-                    countGiftcode++;
-                }
-            }
-            return countGiftcode;
+            return totalGiftcode.Length;
         }
     }
 }
