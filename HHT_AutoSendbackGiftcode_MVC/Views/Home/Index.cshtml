@@ -4,8 +4,8 @@
 
 
 <div class="row mt-4">
-    <div class="col-sm-4">
-        <input type="file" accept=".txt" id="file-code">
+    <div class="col-sm-6">
+        <input type="file" width="100%" style="max-width:unset" accept=".txt" id="file-code">
         <ul class="detail-giftcode mt-4">
             <li>Tổng số giftcode:<span class="detail-giftcode__total">@ViewBag.TotalGiftcode</span></li>
             <li>Đã dùng:<span class="detail-giftcode__used">0</span></li>
@@ -14,7 +14,8 @@
         </ul>
         
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-6">
+        <h4>Lịch sử gửi code hôm nay</h4>
         <table class="table table-bordered">
             <thead>
                 <tr>
