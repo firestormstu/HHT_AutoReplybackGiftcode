@@ -2,30 +2,104 @@
     ViewBag.Title = "Home Page";
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+
+<div class="row mt-4">
+    <div class="col-sm-4">
+        <input type="file" accept=".txt" id="file-code">
+        <ul class="detail-giftcode mt-4">
+            <li>Tổng số giftcode:<span class="detail-giftcode__total">@ViewBag.TotalGiftcode</span></li>
+            <li>Đã dùng:<span class="detail-giftcode__used">0</span></li>
+            <li>Còn lại:<span class="detail-giftcode__remain">0</span></li>
+            <li>Thông báo:<span class="detail-giftcode__notifi">Đây là thông báo</span></li>
+        </ul>
+        
+    </div>
+    <div class="col-sm-8">
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Thời gian</th>
+                    <th scope="col">Tên Facebook</th>
+                    <th scope="col">Mã Giftcode</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <th scope="row">1</th>
+                    <td>29/09/2021</td>
+                    <td>Phòng Võ 1</td>
+                    <td>CODE001</td>
+                </tr>
+                <tr>
+                    <th scope="row">2</th>
+                    <td>29/09/2021</td>
+                    <td>Phòng Võ 2</td>
+                    <td>CODE001</td>
+                </tr>
+                <tr>
+                    <th scope="row">3</th>
+                    <td>29/09/2021</td>
+                    <td>Phòng Võ 3</td>
+                    <td>CODE001</td>
+                </tr>
+                <tr>
+                    <th scope="row">4</th>
+                    <td>29/09/2021</td>
+                    <td>Phòng Võ 4</td>
+                    <td>CODE001</td>
+                </tr>
+
+            </tbody>
+        </table>
+    </div>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<div id="fileContents"></div>
+<script>
+    $(document).ready(function () {
+        $("#file-code").on('change', function () {
+            var file = this.files[0];
+            if (file) {
+                var reader = new FileReader();
+                reader.readAsText(file, "UTF-8");
+                reader.onload = function (evt) {
+                    var dataFile = evt.target.result;
+                    $.ajax({
+                        type: 'POST',
+                        url: '/Home/HandleDataFile',
+                        data: { data: dataFile},
+                        dataType: 'json',
+                        success: function (data) {
+                            if (data.Code == 1) {
+                                $('.detail-giftcode__total').text(data.Data)
+                                swal({
+                                    title: "Thành công!",
+                                    text: data.Messager,
+                                    icon: "success",
+                                    button: "OK!",
+                                })
+                            } else {
+                                swal({
+                                    title: "Lỗi!",
+                                    text: data,
+                                    icon: "warning",
+                                    button: "OK!",
+                                });
+                            }
+                        },
+                    })
+                   
+                }
+                reader.onerror = function (evt) {
+                    swal({
+                        title: "Lỗi!",
+                        text: "Không đọc được file",
+                        icon: "error",
+                    });
+                }
+            }
+        });
+    });
+    
+</script>
