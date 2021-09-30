@@ -11,10 +11,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
     {
         public ActionResult Index()
         {
-<<<<<<< Updated upstream
-            string newFileName = "giftcode.txt";
-            ViewBag.TotalGiftcode= Utils.ReadToFile(newFileName);
-=======
+
             string newFileName = Utils.GiftCodeFileName;
             string zGiftCodeCountName = Utils.BaseGiftCodeCount;
             var zTotalGiftcode = Utils.GetTotalGiftCode(zGiftCodeCountName);
@@ -32,7 +29,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
             {
                 ViewBag.notifi = "Không có file giftcode.txt! Vui lòng tải file Giftcode lên!";
             }
->>>>>>> Stashed changes
+
             return View();
         }
 

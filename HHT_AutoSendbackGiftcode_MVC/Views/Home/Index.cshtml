@@ -9,27 +9,19 @@
         <input type="file" width="100%" style="max-width:unset" accept=".txt" id="file-code">
         <ul class="detail-giftcode mt-4">
             <li>Tổng số giftcode:<span class="detail-giftcode__total">@ViewBag.TotalGiftcode</span></li>
-<<<<<<< Updated upstream
-            <li>Đã dùng:<span class="detail-giftcode__used">0</span></li>
-            <li>Còn lại:<span class="detail-giftcode__remain">0</span></li>
-            <li>Thông báo:<span class="detail-giftcode__notifi">Đây là thông báo</span></li>
-=======
+
             <li>Đã dùng:<span class="detail-giftcode__used">@ViewBag.TotalUsedGiftcode</span></li>
             <li>Còn lại:<span class="detail-giftcode__remain">@ViewBag.TotalRemainGiftcode</span></li>
             <li>Thông báo:<span class="detail-giftcode__notifi">@ViewBag.notifi</span></li>
->>>>>>> Stashed changes
+
         </ul>
         
     </div>
-<<<<<<< Updated upstream
-    <div class="col-sm-6">
-        <h4>Lịch sử gửi code hôm nay</h4>
-=======
+
 
     <div class="col-sm-8">
         <h4 class="text-center m-3">Top 100 Lịch sử gửi code hôm nay</h4>
 
->>>>>>> Stashed changes
         <table class="table table-bordered">
             <thead>
                 <tr>
