@@ -12,7 +12,16 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
         public ActionResult Index()
         {
             string newFileName = "giftcode.txt";
-            ViewBag.TotalGiftcode= Utils.ReadToFile(newFileName);
+            var TotalGiftcode = Utils.ReadToFile(newFileName);
+            ViewBag.TotalGiftcode= TotalGiftcode;
+            if (TotalGiftcode > 0)
+            {
+                ViewBag.notifi = "Load file thành công";
+            }
+            else
+            {
+                ViewBag.notifi = "Lỗi.Load file thất bại";
+            }
             return View();
         }
 

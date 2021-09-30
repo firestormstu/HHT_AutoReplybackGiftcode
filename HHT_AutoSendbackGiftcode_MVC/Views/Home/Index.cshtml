@@ -3,19 +3,27 @@
 }
 
 
-<div class="row mt-4">
-    <div class="col-sm-6">
-        <input type="file" width="100%" style="max-width:unset" accept=".txt" id="file-code">
+<hr />
+<div class="row">
+    <div class="col-sm-4">
+        <h4 class="text-center m-3">Chi tiết</h4>
+        <div class="custom-file">
+            <input id="file-code" class="custom-file-input" accept=".txt" type="file">
+            <label for="file-code" id="file-code__tilte" class="custom-file-label">Chọn tệp .txt</label>
+        </div>
+
         <ul class="detail-giftcode mt-4">
             <li>Tổng số giftcode:<span class="detail-giftcode__total">@ViewBag.TotalGiftcode</span></li>
             <li>Đã dùng:<span class="detail-giftcode__used">0</span></li>
             <li>Còn lại:<span class="detail-giftcode__remain">0</span></li>
-            <li>Thông báo:<span class="detail-giftcode__notifi">Đây là thông báo</span></li>
+            <li>Thông báo:<span class="detail-giftcode__notifi">@ViewBag.notifi</span></li>
         </ul>
-        
+
     </div>
-    <div class="col-sm-6">
-        <h4>Lịch sử gửi code hôm nay</h4>
+
+    <div class="col-sm-8">
+        <h4 class="text-center m-3">Lịch sử gửi code hôm nay</h4>
+
         <table class="table table-bordered">
             <thead>
                 <tr>
@@ -60,6 +68,8 @@
 <script>
     $(document).ready(function () {
         $("#file-code").on('change', function () {
+            var fileName = this.files[0].name;
+            $('#file-code__tilte').text(fileName);
             var file = this.files[0];
             if (file) {
                 var reader = new FileReader();
@@ -73,20 +83,10 @@
                         dataType: 'json',
                         success: function (data) {
                             if (data.Code == 1) {
-                                $('.detail-giftcode__total').text(data.Data)
-                                swal({
-                                    title: "Thành công!",
-                                    text: data.Messager,
-                                    icon: "success",
-                                    button: "OK!",
-                                })
+                                $('.detail-giftcode__total').text(data.Data);
+                                $('.detail-giftcode__notifi').text(data.Messager)
                             } else {
-                                swal({
-                                    title: "Lỗi!",
-                                    text: data,
-                                    icon: "warning",
-                                    button: "OK!",
-                                });
+                                 $('.detail-giftcode__notifi').text(data.Messager)
                             }
                         },
                     })
