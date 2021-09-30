@@ -1,5 +1,6 @@
 ﻿@{
     ViewBag.Title = "Home Page";
+    var zCount = 0;
 }
 
 
@@ -8,48 +9,50 @@
         <input type="file" width="100%" style="max-width:unset" accept=".txt" id="file-code">
         <ul class="detail-giftcode mt-4">
             <li>Tổng số giftcode:<span class="detail-giftcode__total">@ViewBag.TotalGiftcode</span></li>
+<<<<<<< Updated upstream
             <li>Đã dùng:<span class="detail-giftcode__used">0</span></li>
             <li>Còn lại:<span class="detail-giftcode__remain">0</span></li>
             <li>Thông báo:<span class="detail-giftcode__notifi">Đây là thông báo</span></li>
+=======
+            <li>Đã dùng:<span class="detail-giftcode__used">@ViewBag.TotalUsedGiftcode</span></li>
+            <li>Còn lại:<span class="detail-giftcode__remain">@ViewBag.TotalRemainGiftcode</span></li>
+            <li>Thông báo:<span class="detail-giftcode__notifi">@ViewBag.notifi</span></li>
+>>>>>>> Stashed changes
         </ul>
         
     </div>
+<<<<<<< Updated upstream
     <div class="col-sm-6">
         <h4>Lịch sử gửi code hôm nay</h4>
+=======
+
+    <div class="col-sm-8">
+        <h4 class="text-center m-3">Top 100 Lịch sử gửi code hôm nay</h4>
+
+>>>>>>> Stashed changes
         <table class="table table-bordered">
             <thead>
                 <tr>
                     <th scope="col">#</th>
                     <th scope="col">Thời gian</th>
-                    <th scope="col">Tên Facebook</th>
+                    <th scope="col">ID Facebook</th>
                     <th scope="col">Mã Giftcode</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <th scope="row">1</th>
-                    <td>29/09/2021</td>
-                    <td>Phòng Võ 1</td>
-                    <td>CODE001</td>
-                </tr>
-                <tr>
-                    <th scope="row">2</th>
-                    <td>29/09/2021</td>
-                    <td>Phòng Võ 2</td>
-                    <td>CODE001</td>
-                </tr>
-                <tr>
-                    <th scope="row">3</th>
-                    <td>29/09/2021</td>
-                    <td>Phòng Võ 3</td>
-                    <td>CODE001</td>
-                </tr>
-                <tr>
-                    <th scope="row">4</th>
-                    <td>29/09/2021</td>
-                    <td>Phòng Võ 4</td>
-                    <td>CODE001</td>
-                </tr>
+                @foreach (var data in ViewBag.LogFileToday)
+                {
+                    zCount++;
+                    var zItems = data.Split(" \r".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    var zTime = zItems[0] + " " + zItems[1];
+                    <tr>
+                        <th scope="row">@zCount</th>
+                        <td>@zTime </td>
+                        <td>@zItems[2]</td>
+                        <td>@zItems[3]</td>
+                    </tr>
+                }
+              
 
             </tbody>
         </table>
@@ -73,6 +76,7 @@
                         dataType: 'json',
                         success: function (data) {
                             if (data.Code == 1) {
+<<<<<<< Updated upstream
                                 $('.detail-giftcode__total').text(data.Data)
                                 swal({
                                     title: "Thành công!",
@@ -80,6 +84,10 @@
                                     icon: "success",
                                     button: "OK!",
                                 })
+=======
+                                $('.detail-giftcode__notifi').text(data.Messager)
+                                window.location.reload();
+>>>>>>> Stashed changes
                             } else {
                                 swal({
                                     title: "Lỗi!",

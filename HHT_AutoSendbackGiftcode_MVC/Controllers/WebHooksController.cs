@@ -14,7 +14,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
     public class WebHooksController : Controller
     {
         // GET: WebHooks
-       // string Facebook_Page_ID = "272225871315132";
+      
        // string Facebook_Page_Access_Token = "";
  /*       string Facebook_App_ID = "1238069929975483";
         string Facebook_App_Secret = "970fe3cdf40f7927da46e35e4089913f";*/
@@ -42,15 +42,17 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
         public ActionResult ReceivePost(MessageModel data)
         {
            string zFPAccessToken =  WebConfigurationManager.AppSettings["Facebook_Page_Access_Token"];
+            string zFacebook_Page_ID = WebConfigurationManager.AppSettings["Facebook_Page_ID"]; 
             Task.Factory.StartNew(() =>
             {
                 foreach (var entry in data.entry)
                 {
-                    foreach (var message in entry.messaging)
-                    {
-                        if (string.IsNullOrWhiteSpace(message?.message?.text))
+                foreach (var message in entry.messaging)
+                {
+                    if (string.IsNullOrWhiteSpace(message?.message?.text))
                             continue;
-
+                        if (message.sender.id == zFacebook_Page_ID)
+                            continue;
                         //Check user get the code
                         var zIsExist = Utils.CheckUserExist(message.sender.id);
                         if(zIsExist)

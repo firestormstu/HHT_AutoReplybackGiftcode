@@ -11,6 +11,7 @@ namespace HHT_AutoSendbackGiftcode_MVC
     {
         public static string GiftCodeFileName = "giftcode.txt";
         public static string UserGotCodeFileName = "UserGotCode.txt";
+        public static string BaseGiftCodeCount = "GiftCodeCount.txt";
         public static bool WriteToFile(string dataString, string fileName)
         {
             var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
@@ -72,7 +73,7 @@ namespace HHT_AutoSendbackGiftcode_MVC
             var fileName ="Log"+ DateTime.Now.ToString("dd-MM-yyyy")+".txt";
             var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
             var path = currentDomain+"/Log/" + fileName;
-            var dataString = DateTime.Now.ToString("dd/MM/yyyy") + "\r" + userid + "\r" + Giftcode;
+            var dataString = DateTime.Now.ToString("dd/MM") + "   " +DateTime.Now.ToString("HH:mm:ss")+"   " + userid + "   " + Giftcode;
             try
             {
                 if (!File.Exists(path)) // If file does not exists
@@ -86,7 +87,7 @@ namespace HHT_AutoSendbackGiftcode_MVC
                 else // If file already exists
                 {
                     // File.WriteAllText("FILENAME.txt", String.Empty); // Clear file
-                    using (StreamWriter sw = File.CreateText(path))
+                    using (StreamWriter sw = File.AppendText(path))
                     {
                         sw.WriteLine(dataString); // Write text to .txt files
                     }
@@ -117,7 +118,7 @@ namespace HHT_AutoSendbackGiftcode_MVC
                 else // If file already exists
                 {
                     // File.WriteAllText("FILENAME.txt", String.Empty); // Clear file
-                    using (StreamWriter sw = File.CreateText(path))
+                    using (StreamWriter sw = File.AppendText(path))
                     {
                         sw.WriteLine(dataString); // Write text to .txt files
                     }
@@ -188,11 +189,25 @@ namespace HHT_AutoSendbackGiftcode_MVC
             }
 
         }
+        public static int GetTotalGiftCode(string fileName)
+        {
+            var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
+            var path = currentDomain + fileName;
+            if (File.Exists(path)) // If file does exists
+            {
+                string stringData = File.ReadAllText(path);
+                return int.Parse(stringData);
+            }
+            else
+            {
+                return -1;
+            }
+        }
         public static int ReadToFile(string fileName)
         {
             var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
             var path = currentDomain + fileName;
-            if (File.Exists(path)) // If file does not exists
+            if (File.Exists(path)) // If file does exists
             {
                 string stringData=File.ReadAllText(path);
                 return CountSplitString(stringData);
@@ -201,6 +216,27 @@ namespace HHT_AutoSendbackGiftcode_MVC
             {
                 return -1;
             }            
+        }
+        public static string[] ReadLogFile()
+        {
+            var fileName = "Log" + DateTime.Now.ToString("dd-MM-yyyy") + ".txt";
+            var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
+            if(!Directory.Exists(currentDomain + "/Log/"))
+            {
+                Directory.CreateDirectory(currentDomain + "/Log/");
+            }    
+             
+            var path = currentDomain + "/Log/" + fileName;
+            if (File.Exists(path)) // If file does exists
+            {
+                string[] stringData = File.ReadAllText(path, Encoding.Default).Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                return stringData;
+            }
+            else
+            {
+                File.Create(path).Close(); // Create file
+                return new string[0];
+            }
         }
         public static int CountSplitString(string data)
         {

@@ -11,8 +11,28 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
     {
         public ActionResult Index()
         {
+<<<<<<< Updated upstream
             string newFileName = "giftcode.txt";
             ViewBag.TotalGiftcode= Utils.ReadToFile(newFileName);
+=======
+            string newFileName = Utils.GiftCodeFileName;
+            string zGiftCodeCountName = Utils.BaseGiftCodeCount;
+            var zTotalGiftcode = Utils.GetTotalGiftCode(zGiftCodeCountName);
+            var zTotalUsedGiftcode = Utils.ReadToFile(newFileName);
+            ViewBag.TotalUsedGiftcode = zTotalUsedGiftcode;
+            ViewBag.TotalGiftcode = zTotalGiftcode;
+            ViewBag.TotalRemainGiftcode = zTotalGiftcode- zTotalUsedGiftcode;
+            var zLogFileToday = Utils.ReadLogFile();
+            ViewBag.LogFileToday = zLogFileToday.Take(100);
+            if (zTotalGiftcode >= 0)
+            {
+                ViewBag.notifi = "Có file giftcode.txt! Tải file thành công";
+            }
+            else if(zTotalGiftcode == -1)
+            {
+                ViewBag.notifi = "Không có file giftcode.txt! Vui lòng tải file Giftcode lên!";
+            }
+>>>>>>> Stashed changes
             return View();
         }
 
@@ -36,7 +56,12 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
             try
             {
                 string newFileName = Utils.GiftCodeFileName;
+                string zGiftCodeCountName = Utils.BaseGiftCodeCount;
                 var isWrite=Utils.WriteToFile(data, newFileName);
+
+                //write toltal base giftcode
+                var TotalGiftcode = Utils.ReadToFile(newFileName);
+                Utils.WriteToFile(TotalGiftcode.ToString(), zGiftCodeCountName);
                 if (isWrite)
                 {
                     result.Code = 1;
