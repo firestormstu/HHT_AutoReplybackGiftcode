@@ -5,7 +5,7 @@
 
 
 <div class="row mt-4">
-    <div class="col-sm-6">
+    <div class="col-sm-4">
         <input type="file" width="100%" style="max-width:unset" accept=".txt" id="file-code">
         <ul class="detail-giftcode mt-4">
             <li>Tổng số giftcode:<span class="detail-giftcode__total">@ViewBag.TotalGiftcode</span></li>
@@ -17,7 +17,6 @@
         </ul>
         
     </div>
-
 
     <div class="col-sm-8">
         <h4 class="text-center m-3">Top 100 Lịch sử gửi code hôm nay</h4>
@@ -68,18 +67,8 @@
                         dataType: 'json',
                         success: function (data) {
                             if (data.Code == 1) {
-<<<<<<< Updated upstream
-                                $('.detail-giftcode__total').text(data.Data)
-                                swal({
-                                    title: "Thành công!",
-                                    text: data.Messager,
-                                    icon: "success",
-                                    button: "OK!",
-                                })
-=======
                                 $('.detail-giftcode__notifi').text(data.Messager)
                                 window.location.reload();
->>>>>>> Stashed changes
                             } else {
                                 swal({
                                     title: "Lỗi!",
