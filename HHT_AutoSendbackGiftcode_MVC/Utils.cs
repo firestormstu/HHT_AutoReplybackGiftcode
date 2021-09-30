@@ -2,12 +2,15 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Web;
 
 namespace HHT_AutoSendbackGiftcode_MVC
 {
     public static class Utils
     {
+        public static string GiftCodeFileName = "giftcode.txt";
+        public static string UserGotCodeFileName = "UserGotCode.txt";
         public static bool WriteToFile(string dataString, string fileName)
         {
             var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
@@ -38,11 +41,38 @@ namespace HHT_AutoSendbackGiftcode_MVC
             }  
             
         }
-        public static bool WriteToFileLog(string dataString)
+        public static bool WriteToFile(string[] dataArr, string fileName)
+        {
+            var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
+            var path = currentDomain + fileName;
+            try
+            {
+                if (!File.Exists(path)) // If file does not exists
+                {
+                    File.Create(path).Close(); // Create file
+                    File.WriteAllLines(path, dataArr.ToArray());
+                  
+                }
+                else // If file already exists
+                {
+                    // File.WriteAllText("FILENAME.txt", String.Empty); // Clear file
+                    File.WriteAllLines(path, dataArr.ToArray());
+
+                }
+                return true;
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+        }
+        public static bool WriteToFileLog(string userid,string Giftcode)
         {
             var fileName ="Log"+ DateTime.Now.ToString("dd-MM-yyyy")+".txt";
             var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
             var path = currentDomain+"/Log/" + fileName;
+            var dataString = DateTime.Now.ToString("dd/MM/yyyy") + "\r" + userid + "\r" + Giftcode;
             try
             {
                 if (!File.Exists(path)) // If file does not exists
@@ -71,7 +101,7 @@ namespace HHT_AutoSendbackGiftcode_MVC
         }
         public static bool WriteToFileUser(string dataString)
         {
-            var fileName = "UserGotCode.txt";
+            var fileName = UserGotCodeFileName;
             var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
             var path = currentDomain + fileName;
             try
@@ -99,6 +129,33 @@ namespace HHT_AutoSendbackGiftcode_MVC
                 return false;
             }
 
+        }
+        public static string GetNextGiftcode()
+        {
+            var fileName = GiftCodeFileName;
+            var currentDomain = AppDomain.CurrentDomain.BaseDirectory;
+            var path = currentDomain + fileName;
+            try
+            {
+                if (!File.Exists(path)) // If file does not exists
+                {
+                    File.Create(path).Close(); // Create file
+                    return "-99";
+                }
+                else // If file already exists
+                {
+                    //get 1 item
+                    var zData = File.ReadAllText(path, Encoding.Default).Split(" \r\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+                    var line1 = zData.FirstOrDefault();
+                    //write less 1 item
+                    WriteToFile(zData.Skip(1).ToArray(), fileName);
+                    return line1;
+                }
+            }
+            catch (Exception)
+            {
+                return "-99";
+            }
         }
         public static bool CheckUserExist(string PSID)
         {

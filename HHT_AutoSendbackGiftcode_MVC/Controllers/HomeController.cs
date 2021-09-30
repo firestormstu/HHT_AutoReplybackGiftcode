@@ -35,7 +35,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
             AjaxResult result = new AjaxResult();
             try
             {
-                string newFileName = "giftcode.txt";
+                string newFileName = Utils.GiftCodeFileName;
                 var isWrite=Utils.WriteToFile(data, newFileName);
                 if (isWrite)
                 {

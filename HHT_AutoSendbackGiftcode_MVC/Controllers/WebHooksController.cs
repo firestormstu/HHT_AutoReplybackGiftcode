@@ -49,9 +49,42 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
                         if (string.IsNullOrWhiteSpace(message?.message?.text))
                             continue;
 
-                        var msg = "You said: " + message.message.text;
-                        var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
-                        PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token="+ Facebook_Page_Access_Token, json);
+                        //Check user get the code
+                        var zIsExist = Utils.CheckUserExist(message.sender.id);
+                        if(zIsExist)
+                        {
+                            var msg = "Bạn đã nhận giftcode rồi";
+                            var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
+                            PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                        }   
+                        else
+                        {
+                            var zGiftCode = Utils.GetNextGiftcode();
+                            if(zGiftCode == "-99")
+                            {
+                                var msg = "Lỗi hệ thống! Vui lòng liên hệ admin";
+                                var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
+                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                            }    
+                            else if(string.IsNullOrEmpty(zGiftCode))
+                            {
+                                var msg = "Đã hết giftcode! Vui lòng thông cảm!";
+                                var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
+                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                            }    
+                            else
+                            {
+                                var msg = "Giftcode của bạn là:" + zGiftCode;
+                                // lưu người dùng đã nhận
+                                Utils.WriteToFileUser(message.sender.id);
+                                // lưu file log
+                                Utils.WriteToFileLog(message.sender.id,zGiftCode);
+                                var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
+                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                            }    
+                          
+                        }    
+                       
                     }
                 }
             });
