@@ -6,6 +6,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 
 namespace HHT_AutoSendbackGiftcode_MVC.Controllers
@@ -14,7 +15,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
     {
         // GET: WebHooks
        // string Facebook_Page_ID = "272225871315132";
-        string Facebook_Page_Access_Token = "EAARmBJ5iHrsBAObgcBiFbNwx7OYgKD5Y9N1uRqailzMLfrLcRrpBzlKNj4a4ZBxQedAjRXcjZCitl0Fv56mQMa90DQnXUzWvTg9JZBLddrQXKnDfaO6LxjdKYfRcKg6z0Musf2cILOVaVGuvyH9FKHZAnTTeDKXVVTPBZAsqUSYEJDZAcREffxZAsJW8NOhn1o1u5mHNW6BwwZDZD";
+       // string Facebook_Page_Access_Token = "";
  /*       string Facebook_App_ID = "1238069929975483";
         string Facebook_App_Secret = "970fe3cdf40f7927da46e35e4089913f";*/
         [HttpGet]
@@ -40,6 +41,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
         [AcceptVerbs(HttpVerbs.Post)]
         public ActionResult ReceivePost(MessageModel data)
         {
+           string zFPAccessToken =  WebConfigurationManager.AppSettings["Facebook_Page_Access_Token"];
             Task.Factory.StartNew(() =>
             {
                 foreach (var entry in data.entry)
@@ -55,7 +57,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
                         {
                             var msg = "Bạn đã nhận giftcode rồi";
                             var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
-                            PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                            PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + zFPAccessToken, json);
                         }   
                         else
                         {
@@ -64,13 +66,13 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
                             {
                                 var msg = "Lỗi hệ thống! Vui lòng liên hệ admin";
                                 var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
-                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + zFPAccessToken, json);
                             }    
                             else if(string.IsNullOrEmpty(zGiftCode))
                             {
                                 var msg = "Đã hết giftcode! Vui lòng thông cảm!";
                                 var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
-                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + zFPAccessToken, json);
                             }    
                             else
                             {
@@ -80,7 +82,7 @@ namespace HHT_AutoSendbackGiftcode_MVC.Controllers
                                 // lưu file log
                                 Utils.WriteToFileLog(message.sender.id,zGiftCode);
                                 var json = $@" {{recipient: {{  id: {message.sender.id}}},message: {{text: ""{msg}"" }}}}";
-                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + Facebook_Page_Access_Token, json);
+                                PostRaw("https://graph.facebook.com/v2.6/me/messages?access_token=" + zFPAccessToken, json);
                             }    
                           
                         }    
